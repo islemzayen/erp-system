@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ERP System - Frontend
 
-## Getting Started
+## 📌 Project Overview
 
-First, run the development server:
+This project is a modern ERP (Enterprise Resource Planning) system developed using Next.js, React, and TypeScript.
 
-```bash
+The system provides role-based dashboards for different company departments including:
+
+- Admin
+- HR Manager
+- Marketing Manager
+- Sales Manager
+- Employee
+
+Each role has access to specific features and protected routes within the system.
+
+This project was developed as part of a Final Year Project (PFE).
+
+---
+
+## 🛠 Technologies Used
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- Context API (Authentication)
+- Git & GitHub
+
+---
+
+## ✨ Main Features
+
+- Dark professional UI
+- Role-based authentication
+- Protected routes
+- Dashboard system for multiple roles
+- HR management modules (employees, payroll, attendance, reports)
+- Marketing dashboard
+- Sales dashboard
+- Admin panel
+- Employee dashboard
+
+---
+
+## 🚀 How to Run the Project
+
+1️⃣ Clone the repository:
+
+git clone https://github.com/islemzayen/erp-system.git
+
+2️⃣ Navigate to the project folder:
+
+cd erp-system
+
+3️⃣ Install dependencies:
+
+npm install
+
+4️⃣ Run the development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5️⃣ Open in your browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔐 Login Credentials (Mock Users)
 
-To learn more about Next.js, take a look at the following resources:
+This project uses mock authentication.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can log in using the following accounts:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 👑 Admin
+Email: admin@erp.com  
+Password: 123456  
 
-## Deploy on Vercel
+### 👩‍💼 HR Manager
+Email: hr@erp.com  
+Password: 123456  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📢 Marketing Manager
+Email: marketing@erp.com  
+Password: 123456  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 💰 Sales Manager
+Email: sales@erp.com  
+Password: 123456  
+
+### 👨‍💻 Employee
+Email: employee@erp.com  
+Password: 123456  
+
+---
+
+## 📁 Project Structure
+
+src/
+ ├── app/
+ ├── components/
+ ├── context/
+ ├── services/
+ ├── types/
+
+---
+
+## 📌 Notes
+
+- Authentication is simulated using mock data.
+- No backend or database is connected.
+- This project is developed for academic purposes.
+
+---
+
+## 👤 Author
+
+Islem Zayen  
+Engineering Student – ERP PFE Project
