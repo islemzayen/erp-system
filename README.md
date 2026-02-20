@@ -117,4 +117,4 @@ src/
 ## 👤 Author
 
 Islem Zayen  
-Engineering Student – ERP PFE Project
+Computer science student – ERP PFE Project
