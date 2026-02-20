@@ -2,7 +2,7 @@ export type Role =
   | "ADMIN"
   | "HR_MANAGER"
   | "MARKETING_MANAGER"
-  | "ONLINE_SALES"
+  | "SALES_MANAGER"
   | "EMPLOYEE";
 
 export interface User {

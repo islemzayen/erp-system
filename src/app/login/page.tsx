@@ -13,7 +13,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault(); // 🚀 Prevent page refresh
+
     const foundUser = mockUsers.find(
       (user) => user.email === email && user.password === password
     );
@@ -58,7 +60,8 @@ export default function LoginPage() {
             Sign in to your account
           </h2>
 
-          <div className="space-y-6">
+          {/* ✅ FORM STARTS HERE */}
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <label className="block text-sm text-gray-400 mb-2">
                 Email
@@ -69,6 +72,7 @@ export default function LoginPage() {
                 className="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 p-3 rounded-lg transition-all outline-none text-white placeholder-gray-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -82,6 +86,7 @@ export default function LoginPage() {
                 className="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 p-3 rounded-lg transition-all outline-none text-white placeholder-gray-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </div>
 
@@ -89,13 +94,14 @@ export default function LoginPage() {
               <p className="text-red-400 text-sm">{error}</p>
             )}
 
+            {/* ✅ SUBMIT BUTTON */}
             <button
-              onClick={handleLogin}
+              type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-all duration-300"
             >
               Sign In
             </button>
-          </div>
+          </form>
 
           <p className="text-xs text-gray-500 mt-8 text-center">
             © 2026 ERP System. All rights reserved.

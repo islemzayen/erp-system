@@ -28,22 +28,22 @@ export default function AdminDashboard() {
           {/* 🔥 KPI CARDS */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>
-              <h3 className="text-gray-500 text-sm">Total Employees</h3>
+              <h3 className="text-lg font-semibold mb-4">Total Employees</h3>
               <p className="text-3xl font-bold text-blue-600 mt-2">124</p>
             </Card>
 
             <Card>
-              <h3 className="text-gray-500 text-sm">Monthly Revenue</h3>
+              <h3 className="text-lg font-semibold mb-4">Monthly Revenue</h3>
               <p className="text-3xl font-bold text-green-600 mt-2">$48,200</p>
             </Card>
 
             <Card>
-              <h3 className="text-gray-500 text-sm">Total Orders</h3>
+              <h3 className="text-lg font-semibold mb-4">Total Orders</h3>
               <p className="text-3xl font-bold text-purple-600 mt-2">356</p>
             </Card>
 
             <Card>
-              <h3 className="text-gray-500 text-sm">Active Campaigns</h3>
+              <h3 className="text-lg font-semibold mb-4">Active Campaigns</h3>
               <p className="text-3xl font-bold text-orange-500 mt-2">7</p>
             </Card>
           </div>

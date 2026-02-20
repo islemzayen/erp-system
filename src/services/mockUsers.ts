@@ -35,7 +35,7 @@ export const mockUsers: MockUser[] = [
     name: "Sales Manager",
     email: "sales@erp.com",
     password: "123456",
-    role: "ONLINE_SALES",
+    role: "SALES_MANAGER",
   },
   {
     id: "5",
