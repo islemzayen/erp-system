@@ -3,73 +3,130 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { mockUsers } from "@/services/mockUsers";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault(); // 🚀 Prevent page refresh
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const foundUser = mockUsers.find(
-      (user) => user.email === email && user.password === password
-    );
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!foundUser) {
-      setError("Invalid email or password");
-      return;
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(t("invalidCredentials"));
+        return;
+      }
+
+      login({
+        id: data.user.id,
+        name: data.user.name,
+        email: data.user.email,
+        role: data.user.role,
+        token: "jwt-token",
+      });
+
+      router.push(
+        `/dashboard/${data.user.role.toLowerCase().replace("_manager", "")}`
+      );
+    } catch (err) {
+      setError(t("invalidCredentials"));
+    } finally {
+      setLoading(false);
     }
-
-    login({
-      id: foundUser.id,
-      name: foundUser.name,
-      email: foundUser.email,
-      role: foundUser.role,
-      token: "fake-jwt-token",
-    });
-
-    router.push(
-      `/dashboard/${foundUser.role.toLowerCase().replace("_manager", "")}`
-    );
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-950 text-gray-200">
+    <div className="min-h-screen flex bg-gray-100 dark:bg-[#0d0d0d] text-gray-900 dark:text-white transition-colors duration-300">
+
       {/* LEFT SIDE */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 items-center justify-center border-r border-gray-800">
-        <div className="text-center px-12">
-          <h1 className="text-4xl font-bold tracking-wide mb-6 text-white">
-            ERP SYSTEM
-          </h1>
-          <p className="text-gray-400 text-lg leading-relaxed">
-            Secure enterprise management platform for HR, Marketing,
-            Sales and Operations.
+      <div className="hidden md:flex w-1/2 items-center justify-center border-r border-gray-200 dark:border-[#2a2a2a] relative overflow-hidden">
+        {/* Subtle grid background */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(#00ff9d 1px, transparent 1px), linear-gradient(90deg, #00ff9d 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+
+        {/* Glow orb */}
+        <div className="absolute w-72 h-72 rounded-full bg-[#00ff9d]/5 blur-3xl" />
+
+        <div className="relative text-center px-16 z-10">
+          <p className="text-[10px] tracking-[0.3em] uppercase text-gray-500 font-mono mb-4">
+            {t("erpSubtitle")}
           </p>
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900 dark:text-white font-mono mb-6">
+            ERP<span className="text-[#00ff9d]">.</span>
+          </h1>
+          <p className="text-gray-500 text-sm font-mono leading-relaxed max-w-xs mx-auto">
+            {t("erpTagline")}
+          </p>
+
+          {/* Decorative stat pills */}
+          <div className="mt-12 flex flex-col gap-3 items-center">
+            {[
+              { label: t("statRevenue"), value: "$218,400" },
+              { label: t("statOrders"), value: "1,646" },
+              { label: t("statUptime"), value: "99.98%" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="flex items-center justify-between w-56 bg-white dark:bg-[#161616] border border-gray-200 dark:border-[#2a2a2a] rounded-xl px-4 py-3 transition-colors duration-300"
+              >
+                <span className="text-[11px] font-mono tracking-widest uppercase text-gray-500">
+                  {stat.label}
+                </span>
+                <span className="text-[#00ff9d] font-mono text-sm font-bold">
+                  {stat.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex w-full md:w-1/2 items-center justify-center">
-        <div className="bg-gray-900 p-10 rounded-2xl shadow-2xl w-96 border border-gray-800">
-          <h2 className="text-2xl font-semibold mb-8 text-white">
-            Sign in to your account
-          </h2>
+      <div className="flex w-full md:w-1/2 items-center justify-center p-8">
+        <div className="w-full max-w-sm">
 
-          {/* ✅ FORM STARTS HERE */}
-          <form onSubmit={handleLogin} className="space-y-6">
+          {/* Header */}
+          <div className="mb-10">
+            <p className="text-[10px] tracking-[0.3em] uppercase text-gray-500 font-mono mb-3">
+              {t("authLabel")}
+            </p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white font-mono tracking-tight">
+              {t("signInTitle")}
+            </h2>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                Email
+              <label className="block text-[11px] font-mono tracking-[0.2em] uppercase text-gray-500 mb-2">
+                {t("emailLabel")}
               </label>
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 p-3 rounded-lg transition-all outline-none text-white placeholder-gray-500"
+                placeholder={t("emailPlaceholder")}
+                className="w-full bg-white dark:bg-[#161616] border border-gray-200 dark:border-[#2a2a2a] focus:border-[#00ff9d]/50 focus:outline-none p-3 rounded-lg transition-colors text-gray-900 dark:text-white font-mono text-sm placeholder-gray-400 dark:placeholder-gray-600"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -77,13 +134,13 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                Password
+              <label className="block text-[11px] font-mono tracking-[0.2em] uppercase text-gray-500 mb-2">
+                {t("passwordLabel")}
               </label>
               <input
                 type="password"
-                placeholder="Enter your password"
-                className="w-full bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 p-3 rounded-lg transition-all outline-none text-white placeholder-gray-500"
+                placeholder="••••••••"
+                className="w-full bg-white dark:bg-[#161616] border border-gray-200 dark:border-[#2a2a2a] focus:border-[#00ff9d]/50 focus:outline-none p-3 rounded-lg transition-colors text-gray-900 dark:text-white font-mono text-sm placeholder-gray-400 dark:placeholder-gray-600"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -91,20 +148,22 @@ export default function LoginPage() {
             </div>
 
             {error && (
-              <p className="text-red-400 text-sm">{error}</p>
+              <p className="text-red-400 text-xs font-mono tracking-wide">
+                ✗ {error}
+              </p>
             )}
 
-            {/* ✅ SUBMIT BUTTON */}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition-all duration-300"
+              disabled={loading}
+              className="w-full mt-2 py-3 rounded-lg bg-[#00ff9d]/10 border border-[#00ff9d]/30 text-[#00c97a] dark:text-[#00ff9d] font-mono text-sm tracking-widest uppercase hover:bg-[#00ff9d]/20 hover:border-[#00ff9d]/60 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+{loading ? "SIGNING IN..." : t("signInButton")}
             </button>
           </form>
 
-          <p className="text-xs text-gray-500 mt-8 text-center">
-            © 2026 ERP System. All rights reserved.
+          <p className="text-[11px] text-gray-400 dark:text-gray-600 mt-10 font-mono text-center tracking-widest">
+            {t("copyright")}
           </p>
         </div>
       </div>

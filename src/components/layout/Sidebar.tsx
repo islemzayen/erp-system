@@ -3,208 +3,86 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import {
-  LayoutDashboard,
-  Users,
-  Megaphone,
-  ShoppingCart,
-  Menu,
-  Calendar,
-  DollarSign,
-  BarChart,
-  FileText,
+  LayoutDashboard, Users, Megaphone, ShoppingCart,
+  Menu, Calendar, DollarSign, BarChart, FileText,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Sidebar() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [collapsed, setCollapsed] = useState(false);
 
   if (!user) return null;
 
-  const dashboardPath = `/dashboard/${user.role
-    .toLowerCase()
-    .replace("_manager", "")}`;
+  const dashboardPath = `/dashboard/${user.role.toLowerCase().replace("_manager", "")}`;
+
+  const linkClass =
+    "flex items-center gap-3 text-gray-500 dark:text-gray-400 hover:text-[#00ff9d] dark:hover:text-[#00ff9d] transition-colors duration-150 text-sm font-mono tracking-wide py-1";
 
   return (
     <motion.div
-      animate={{ width: collapsed ? 80 : 240 }}
-      className="m-4 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-xl transition-all"
+      animate={{ width: collapsed ? 72 : 220 }}
+      transition={{ duration: 0.2 }}
+      className="m-4 p-4 rounded-2xl bg-white dark:bg-[#161616] border border-gray-200 dark:border-[#2a2a2a] shadow-xl flex-shrink-0 overflow-hidden transition-colors duration-300"
     >
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-8">
         {!collapsed && (
-          <h2 className="text-lg font-bold text-blue-600">ERP</h2>
+          <span className="text-[#00ff9d] font-mono font-bold text-lg tracking-widest">ERP</span>
         )}
-        <button onClick={() => setCollapsed(!collapsed)}>
-          <Menu size={20} />
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="text-gray-400 dark:text-gray-500 hover:text-[#00ff9d] transition-colors ml-auto"
+        >
+          <Menu size={18} />
         </button>
       </div>
 
-      <ul className="space-y-4">
-        {/* Main Dashboard (for ALL roles) */}
+      <ul className="space-y-5">
         <li>
-          <Link
-            href={dashboardPath}
-            className="flex items-center gap-3 hover:text-blue-500 transition"
-          >
-            <LayoutDashboard size={18} />
-            {!collapsed && "Dashboard"}
+          <Link href={dashboardPath} className={linkClass}>
+            <LayoutDashboard size={16} className="flex-shrink-0" />
+            {!collapsed && t("dashboard")}
           </Link>
         </li>
 
-        {/* ================= ADMIN ================= */}
         {user.role === "ADMIN" && (
           <>
-            <li>
-              <Link
-                href="/dashboard/admin/hr"
-                className="flex items-center gap-3 hover:text-blue-500"
-              >
-                <Users size={18} />
-                {!collapsed && "HR"}
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/dashboard/admin/marketing"
-                className="flex items-center gap-3 hover:text-blue-500"
-              >
-                <Megaphone size={18} />
-                {!collapsed && "Marketing"}
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                href="/dashboard/admin/sales"
-                className="flex items-center gap-3 hover:text-blue-500"
-              >
-                <ShoppingCart size={18} />
-                {!collapsed && "Online sales"}
-              </Link>
-            </li>
+            <li><Link href="/dashboard/admin/hr" className={linkClass}><Users size={16} className="flex-shrink-0" />{!collapsed && t("hr")}</Link></li>
+            <li><Link href="/dashboard/admin/marketing" className={linkClass}><Megaphone size={16} className="flex-shrink-0" />{!collapsed && t("marketing")}</Link></li>
+            <li><Link href="/dashboard/admin/sales" className={linkClass}><ShoppingCart size={16} className="flex-shrink-0" />{!collapsed && t("onlineSales")}</Link></li>
           </>
         )}
 
-        {/* ================= HR MANAGER ================= */}
         {user.role === "HR_MANAGER" && (
           <>
-            <li>
-              <Link href="/dashboard/hr/employees" className="flex items-center gap-3 hover:text-blue-500">
-                <Users size={18} />
-                {!collapsed && "Employees"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/hr/attendance" className="flex items-center gap-3 hover:text-blue-500">
-                <Calendar size={18} />
-                {!collapsed && "Attendance"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/hr/payroll" className="flex items-center gap-3 hover:text-blue-500">
-                <DollarSign size={18} />
-                {!collapsed && "Payroll"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/hr/performance" className="flex items-center gap-3 hover:text-blue-500">
-                <BarChart size={18} />
-                {!collapsed && "Performance"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/hr/reports" className="flex items-center gap-3 hover:text-blue-500">
-                <FileText size={18} />
-                {!collapsed && "Reports"}
-              </Link>
-            </li>
+            <li><Link href="/dashboard/hr/employees" className={linkClass}><Users size={16} className="flex-shrink-0" />{!collapsed && t("employees")}</Link></li>
+            <li><Link href="/dashboard/hr/attendance" className={linkClass}><Calendar size={16} className="flex-shrink-0" />{!collapsed && t("attendance")}</Link></li>
+            <li><Link href="/dashboard/hr/payroll" className={linkClass}><DollarSign size={16} className="flex-shrink-0" />{!collapsed && t("payroll")}</Link></li>
+            <li><Link href="/dashboard/hr/performance" className={linkClass}><BarChart size={16} className="flex-shrink-0" />{!collapsed && t("performance")}</Link></li>
+            <li><Link href="/dashboard/hr/reports" className={linkClass}><FileText size={16} className="flex-shrink-0" />{!collapsed && t("reports")}</Link></li>
           </>
         )}
 
-        {/* ================= SALES MANAGER ================= */}
-{user.role === "SALES_MANAGER" && (
+        {user.role === "SALES_MANAGER" && (
           <>
-            <li>
-              <Link href="/dashboard/sales/catalog" className="flex items-center gap-3 hover:text-blue-500">
-                <ShoppingCart size={18} />
-                {!collapsed && "Product Catalog"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/sales/orders" className="flex items-center gap-3 hover:text-blue-500">
-                <FileText size={18} />
-                {!collapsed && "Online Orders"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/sales/stock" className="flex items-center gap-3 hover:text-blue-500">
-                <BarChart size={18} />
-                {!collapsed && "Stock & Production"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/sales/tracking" className="flex items-center gap-3 hover:text-blue-500">
-                <Calendar size={18} />
-                {!collapsed && "Delivery Tracking"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/sales/returns" className="flex items-center gap-3 hover:text-blue-500">
-                <DollarSign size={18} />
-                {!collapsed && "Returns & Refunds"}
-              </Link>
-            </li>
+            <li><Link href="/dashboard/sales/catalog" className={linkClass}><ShoppingCart size={16} className="flex-shrink-0" />{!collapsed && t("productCatalog")}</Link></li>
+            <li><Link href="/dashboard/sales/orders" className={linkClass}><FileText size={16} className="flex-shrink-0" />{!collapsed && t("onlineOrders")}</Link></li>
+            <li><Link href="/dashboard/sales/stock" className={linkClass}><BarChart size={16} className="flex-shrink-0" />{!collapsed && t("stockProduction")}</Link></li>
+            <li><Link href="/dashboard/sales/tracking" className={linkClass}><Calendar size={16} className="flex-shrink-0" />{!collapsed && t("deliveryTracking")}</Link></li>
+            <li><Link href="/dashboard/sales/returns" className={linkClass}><DollarSign size={16} className="flex-shrink-0" />{!collapsed && t("returnsRefunds")}</Link></li>
           </>
         )}
 
-        {/* ================= MARKETING MANAGER ================= */}
         {user.role === "MARKETING_MANAGER" && (
           <>
-            <li>
-              <Link href="/dashboard/marketing/campaigns" className="flex items-center gap-3 hover:text-blue-500">
-                <Megaphone size={18} />
-                {!collapsed && "Campaigns"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/marketing/analytics" className="flex items-center gap-3 hover:text-blue-500">
-                <BarChart size={18} />
-                {!collapsed && "Analytics"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/marketing/segmentation" className="flex items-center gap-3 hover:text-blue-500">
-                <Users size={18} />
-                {!collapsed && "Segmentation"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/marketing/budget" className="flex items-center gap-3 hover:text-blue-500">
-                <DollarSign size={18} />
-                {!collapsed && "Budget"}
-              </Link>
-            </li>
-
-            <li>
-              <Link href="/dashboard/marketing/promotions" className="flex items-center gap-3 hover:text-blue-500">
-                <Calendar size={18} />
-                {!collapsed && "Promotions"}
-              </Link>
-            </li>
+            <li><Link href="/dashboard/marketing/campaigns" className={linkClass}><Megaphone size={16} className="flex-shrink-0" />{!collapsed && t("campaigns")}</Link></li>
+            <li><Link href="/dashboard/marketing/analytics" className={linkClass}><BarChart size={16} className="flex-shrink-0" />{!collapsed && t("analytics")}</Link></li>
+            <li><Link href="/dashboard/marketing/segmentation" className={linkClass}><Users size={16} className="flex-shrink-0" />{!collapsed && t("segmentation")}</Link></li>
+            <li><Link href="/dashboard/marketing/budget" className={linkClass}><DollarSign size={16} className="flex-shrink-0" />{!collapsed && t("budget")}</Link></li>
+            <li><Link href="/dashboard/marketing/promotions" className={linkClass}><Calendar size={16} className="flex-shrink-0" />{!collapsed && t("promotions")}</Link></li>
           </>
         )}
       </ul>
