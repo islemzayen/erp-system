@@ -19,10 +19,12 @@ const payrollData = [
 ];
 
 const AVATAR_COLORS = [
-  "bg-emerald-500/20 text-emerald-400","bg-blue-500/20 text-blue-400","bg-purple-500/20 text-purple-400",
-  "bg-amber-500/20 text-amber-400","bg-pink-500/20 text-pink-400","bg-teal-500/20 text-teal-400",
-  "bg-red-500/20 text-red-400","bg-indigo-500/20 text-indigo-400",
+  "bg-emerald-500/20 text-emerald-400", "bg-blue-500/20 text-blue-400",
+  "bg-purple-500/20 text-purple-400",   "bg-amber-500/20 text-amber-400",
+  "bg-pink-500/20 text-pink-400",       "bg-teal-500/20 text-teal-400",
+  "bg-red-500/20 text-red-400",         "bg-indigo-500/20 text-indigo-400",
 ];
+
 const STATUS_STYLES: Record<string, { badge: string; dot: string }> = {
   Paid:       { badge: "bg-emerald-500/15 text-emerald-400", dot: "bg-emerald-400" },
   Pending:    { badge: "bg-amber-500/15 text-amber-400",     dot: "bg-amber-400" },
@@ -57,16 +59,19 @@ export default function HRPayroll() {
       <DashboardLayout>
         <div className="min-h-screen bg-gray-100 dark:bg-[#060a0f] text-gray-900 dark:text-white font-mono p-6 space-y-6 transition-colors duration-300">
 
+          {/* ── HEADER ── */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight leading-none">
-                {t("payroll")} <span className="text-emerald-400">{t("payrollManagement").split(" ").slice(1).join(" ")}</span>
+                {t("payrollManagement").split(" ")[0]}{" "}
+                <span className="text-emerald-400">{t("payrollManagement").split(" ").slice(1).join(" ")}</span>
               </h1>
               <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">Fév 2026 · EMM ERP · v2.4</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />{t("live")}
+                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
+                {t("live")}
               </span>
               <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
                 <Download size={13} /> {t("export")}
@@ -77,11 +82,12 @@ export default function HRPayroll() {
             </div>
           </div>
 
+          {/* ── KPI STRIP ── */}
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
             {[
-              { label: t("totalNetPayroll"), value: `${totalNet.toLocaleString()} TND`,   sub: t("thisMonth"),      icon: <DollarSign size={14} />,  iconBg: "bg-emerald-500/10 text-emerald-400" },
-              { label: t("totalBonuses"),    value: `${totalBonus.toLocaleString()} TND`, sub: t("distributed"),    icon: <TrendingUp size={14} />,  iconBg: "bg-blue-500/10 text-blue-400" },
-              { label: t("slipsPaid"),       value: `${paidCount} / ${payrollData.length}`, sub: t("processed"),    icon: <FileText size={14} />,    iconBg: "bg-purple-500/10 text-purple-400" },
+              { label: t("totalNetPayroll"), value: `${totalNet.toLocaleString()} TND`,     sub: t("thisMonth"),     icon: <DollarSign size={14} />,  iconBg: "bg-emerald-500/10 text-emerald-400" },
+              { label: t("totalBonuses"),    value: `${totalBonus.toLocaleString()} TND`,   sub: t("distributed"),   icon: <TrendingUp size={14} />,  iconBg: "bg-blue-500/10 text-blue-400" },
+              { label: t("slipsPaid"),       value: `${paidCount} / ${payrollData.length}`, sub: t("processed"),     icon: <FileText size={14} />,    iconBg: "bg-purple-500/10 text-purple-400" },
               { label: t("pendingHold"),     value: String(payrollData.filter(r => r.status === "Pending" || r.status === "Hold").length), sub: t("requiresAction"), icon: <AlertCircle size={14} />, iconBg: "bg-amber-500/10 text-amber-400" },
             ].map((s, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
@@ -96,6 +102,7 @@ export default function HRPayroll() {
             ))}
           </div>
 
+          {/* ── TABLE ── */}
           <div className={`${card} overflow-hidden`}>
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-white/[0.05]">
               <div>
@@ -105,10 +112,12 @@ export default function HRPayroll() {
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                  <input className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
+                  <input
+                    className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
                     placeholder={t("searchEmployee")} value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
-                <select className="px-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none transition"
+                <select
+                  className="px-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none transition"
                   value={filterStatus} onChange={(e) => setFilter(e.target.value)}>
                   <option value="all">{t("allStatus")}</option>
                   <option value="paid">{t("paid")}</option>
@@ -126,7 +135,7 @@ export default function HRPayroll() {
             </div>
 
             {filtered.length === 0 ? (
-              <div className="py-12 text-center text-xs text-gray-400">{t("noPayrollMatch")}</div>
+              <div className="py-12 text-center text-xs text-gray-400 dark:text-gray-600">{t("noPayrollMatch")}</div>
             ) : (
               filtered.map((row, i) => {
                 const sc = STATUS_STYLES[row.status];
@@ -153,6 +162,7 @@ export default function HRPayroll() {
               })
             )}
           </div>
+
         </div>
       </DashboardLayout>
     </ProtectedRoute>

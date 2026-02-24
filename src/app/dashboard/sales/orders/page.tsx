@@ -4,27 +4,32 @@ import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Package, Search, Plus, Download, Tag, Archive, AlertTriangle, TrendingUp } from "lucide-react";
+import {
+  ShoppingCart, CheckCircle, Clock, TrendingUp,
+  Search, Plus, Download, ArrowDownToLine,
+} from "lucide-react";
 
-interface Product {
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface Order {
   id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  status: "in-stock" | "low-stock" | "out-of-stock";
-  sku: string;
+  customer: string;
+  product: string;
+  amount: number;
+  status: "completed" | "processing" | "pending" | "cancelled";
+  date: string;
+  avatar: string;
 }
 
-const PRODUCTS: Product[] = [
-  { id: "PRD-001", name: "Mortise Lock Pro",      category: "Locks",      price: 48.00,  stock: 124, status: "in-stock",     sku: "MLP-48" },
-  { id: "PRD-002", name: "Brass Key Blank B2",    category: "Keys",       price: 1.20,   stock: 5400,status: "in-stock",     sku: "BKB-B2" },
-  { id: "PRD-003", name: "Smart Key Module",      category: "Electronic", price: 132.00, stock: 18,  status: "low-stock",    sku: "SKM-132" },
-  { id: "PRD-004", name: "Padlock Shackle 50mm",  category: "Padlocks",   price: 9.60,   stock: 312, status: "in-stock",     sku: "PLS-50" },
-  { id: "PRD-005", name: "Cylinder Lock Core",    category: "Locks",      price: 22.50,  stock: 7,   status: "low-stock",    sku: "CLC-22" },
-  { id: "PRD-006", name: "RFID Tag Sticker",      category: "Electronic", price: 0.74,   stock: 0,   status: "out-of-stock", sku: "RFT-01" },
-  { id: "PRD-007", name: "Deadbolt Lock Set",     category: "Locks",      price: 54.00,  stock: 88,  status: "in-stock",     sku: "DLS-54" },
-  { id: "PRD-008", name: "Key Duplicator Unit",   category: "Equipment",  price: 1200.00,stock: 3,   status: "low-stock",    sku: "KDU-12" },
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const ORDERS: Order[] = [
+  { id: "ORD-7841", customer: "Amira Benali",    product: "Mortise Lock Pro × 12",      amount: 2400,  status: "completed",  date: "20 Feb", avatar: "AB" },
+  { id: "ORD-7840", customer: "Khalil Mansouri", product: "Brass Key Blank B2 × 500",   amount: 875,   status: "processing", date: "20 Feb", avatar: "KM" },
+  { id: "ORD-7839", customer: "Sarra Tlili",     product: "Smart Key Module × 8",       amount: 3200,  status: "pending",    date: "19 Feb", avatar: "ST" },
+  { id: "ORD-7838", customer: "Fares Dridi",     product: "Padlock Shackle 50mm × 200", amount: 1600,  status: "completed",  date: "19 Feb", avatar: "FD" },
+  { id: "ORD-7837", customer: "Nour Hamdi",      product: "Cylinder Lock Core × 30",    amount: 5100,  status: "cancelled",  date: "18 Feb", avatar: "NH" },
+  { id: "ORD-7836", customer: "Tarek Jebali",    product: "RFID Tag Sticker × 1000",    amount: 740,   status: "completed",  date: "18 Feb", avatar: "TJ" },
+  { id: "ORD-7835", customer: "Rim Chaibi",      product: "Deadbolt Lock Set × 5",      amount: 1620,  status: "processing", date: "17 Feb", avatar: "RC" },
+  { id: "ORD-7834", customer: "Yassine Karray",  product: "Key Duplicator Unit × 1",    amount: 1200,  status: "pending",    date: "17 Feb", avatar: "YK" },
 ];
 
 const AVATAR_COLORS = [
@@ -38,7 +43,8 @@ const AVATAR_COLORS = [
   "bg-indigo-500/20 text-indigo-400",
 ];
 
-export default function CatalogPage() {
+// ─── Main ─────────────────────────────────────────────────────────────────────
+export default function OrdersPage() {
   const { t } = useLanguage();
   const [search, setSearch]       = useState("");
   const [filterStatus, setFilter] = useState("all");
@@ -46,23 +52,29 @@ export default function CatalogPage() {
   useEffect(() => setMounted(true), []);
 
   const STATUS_CONFIG = {
-    "in-stock":     { label: t("inStockLabel"),     badge: "bg-emerald-500/15 text-emerald-400", dot: "bg-emerald-400" },
-    "low-stock":    { label: t("lowStockLabel"),    badge: "bg-amber-500/15 text-amber-400",     dot: "bg-amber-400" },
-    "out-of-stock": { label: t("outOfStockLabel"),  badge: "bg-red-500/15 text-red-400",         dot: "bg-red-400" },
+    completed:  { label: t("completed"),  badge: "bg-emerald-500/15 text-emerald-400", dot: "bg-emerald-400" },
+    processing: { label: t("processing"), badge: "bg-blue-500/15 text-blue-400",       dot: "bg-blue-400"    },
+    pending:    { label: t("pending"),    badge: "bg-amber-500/15 text-amber-400",     dot: "bg-amber-400"   },
+    cancelled:  { label: t("cancelled"),  badge: "bg-red-500/15 text-red-400",         dot: "bg-red-400"     },
   };
 
-  const filtered = PRODUCTS.filter((p) => {
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.category.toLowerCase().includes(search.toLowerCase()) ||
-      p.sku.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = filterStatus === "all" || p.status === filterStatus;
+  const filtered = ORDERS.filter(o => {
+    const matchSearch =
+      o.customer.toLowerCase().includes(search.toLowerCase()) ||
+      o.id.toLowerCase().includes(search.toLowerCase()) ||
+      o.product.toLowerCase().includes(search.toLowerCase());
+    const matchStatus = filterStatus === "all" || o.status === filterStatus;
     return matchSearch && matchStatus;
   });
 
-  const inStockCount  = PRODUCTS.filter(p => p.status === "in-stock").length;
-  const lowStockCount = PRODUCTS.filter(p => p.status === "low-stock").length;
-  const outCount      = PRODUCTS.filter(p => p.status === "out-of-stock").length;
-  const totalValue    = PRODUCTS.reduce((s, p) => s + p.price * p.stock, 0);
+  const completedCount  = ORDERS.filter(o => o.status === "completed").length;
+  const processingCount = ORDERS.filter(o => o.status === "processing").length;
+  const pendingCount    = ORDERS.filter(o => o.status === "pending").length;
+  const cancelledCount  = ORDERS.filter(o => o.status === "cancelled").length;
+  const activeOrders    = ORDERS.filter(o => o.status !== "cancelled");
+  const totalRevenue    = activeOrders.reduce((s, o) => s + o.amount, 0);
+  const avgOrderVal     = Math.round(totalRevenue / activeOrders.length);
+  const completionRate  = Math.round((completedCount / ORDERS.length) * 100);
 
   const card = "bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-white/[0.06] rounded-2xl transition-colors duration-300";
 
@@ -70,37 +82,56 @@ export default function CatalogPage() {
     <DashboardLayout>
       <div className="min-h-screen bg-gray-100 dark:bg-[#060a0f] text-gray-900 dark:text-white font-mono p-6 space-y-6 transition-colors duration-300">
 
-        {/* ── HEADER ── */}
+        {/* ── HEADER ─────────────────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight leading-none">
-              {t("product")} <span className="text-emerald-400">{t("productCatalog")}</span>
-            </h1>
+           <h1 className="text-3xl font-bold tracking-tight leading-none">
+  {t("orders")} <span className="text-emerald-400">{t("onlineOrdersTitle")}</span>
+</h1>
             <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">
               Feb 20, 2026 · EMM Hardware ERP · v2.4
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
-              {t("live")}
+              
             </span>
             <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
               <Download size={13} /> {t("exportCsv")}
             </button>
             <button className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-black font-bold">
-              <Plus size={13} /> {t("addProduct")}
+              <Plus size={13} /> {t("newOrder2")}
             </button>
           </div>
         </div>
 
-        {/* ── KPI CARDS ── */}
+        {/* ── KPI CARDS ──────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {[
-            { label: t("totalProducts"), value: PRODUCTS.length,            prefix: "",  change: t("thisMonth2"),    changeColor: "text-emerald-400", valueColor: "text-emerald-400", icon: <Package size={16} />,       iconBg: "bg-emerald-500/10 text-emerald-400" },
-            { label: t("inStock"),       value: inStockCount,                prefix: "",  change: `${inStockCount} SKUs`, changeColor: "text-blue-400", valueColor: "text-blue-400",    icon: <Tag size={16} />,           iconBg: "bg-blue-500/10 text-blue-400" },
-            { label: t("lowStock"),      value: lowStockCount,               prefix: "",  change: t("needsReorder"), changeColor: "text-amber-400",   valueColor: "text-amber-400",   icon: <AlertTriangle size={16} />, iconBg: "bg-amber-500/10 text-amber-400" },
-            { label: t("catalogValue"),  value: Math.round(totalValue/1000), prefix: "$", change: t("tndEquivalent"),changeColor: "text-purple-400",  valueColor: "text-purple-400",  icon: <TrendingUp size={16} />,    iconBg: "bg-purple-500/10 text-purple-400" },
+            {
+              label: t("totalOrdersKpi2"), value: ORDERS.length,    suffix: "",
+              change: `+${ORDERS.length} ${t("thisMonth")}`,        changeColor: "text-emerald-400",
+              valueColor: "text-emerald-400", icon: <ShoppingCart size={16} />,
+              iconBg: "bg-emerald-500/10 text-emerald-400",
+            },
+            {
+              label: t("completedKpi2"),  value: completedCount,    suffix: "",
+              change: t("successfullyDone"),                         changeColor: "text-blue-400",
+              valueColor: "text-blue-400", icon: <CheckCircle size={16} />,
+              iconBg: "bg-blue-500/10 text-blue-400",
+            },
+            {
+              label: t("processingKpi"),  value: processingCount,   suffix: "",
+              change: t("inTransitSub"),                             changeColor: "text-amber-400",
+              valueColor: "text-amber-400", icon: <Clock size={16} />,
+              iconBg: "bg-amber-500/10 text-amber-400",
+            },
+            {
+              label: t("totalRevenue"),   value: totalRevenue,      suffix: "",
+              change: t("revenueThisPeriod"),                        changeColor: "text-purple-400",
+              valueColor: "text-purple-400", icon: <TrendingUp size={16} />,
+              iconBg: "bg-purple-500/10 text-purple-400",
+            },
           ].map((kpi, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
               className={`${card} p-5 flex flex-col gap-3`}>
@@ -109,20 +140,29 @@ export default function CatalogPage() {
                 <span className={`text-xs font-bold ${kpi.changeColor}`}>{kpi.change}</span>
               </div>
               <p className="text-[10px] uppercase tracking-widest text-gray-500">{kpi.label}</p>
-              <p className={`text-3xl font-bold tracking-tight ${kpi.valueColor}`}>
-                {kpi.prefix}{kpi.value.toLocaleString()}
-              </p>
+              {i === 3 ? (
+                <div>
+                  <p className={`text-3xl font-bold tracking-tight ${kpi.valueColor}`}>
+                    {(kpi.value / 1000).toFixed(1)}K
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">TND {kpi.value.toLocaleString()}</p>
+                </div>
+              ) : (
+                <p className={`text-3xl font-bold tracking-tight ${kpi.valueColor}`}>
+                  {kpi.value.toLocaleString()}
+                </p>
+              )}
             </motion.div>
           ))}
         </div>
 
-        {/* ── SECONDARY STRIP ── */}
+        {/* ── SECONDARY STRIP ────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           {[
-            { label: t("categories"),   value: "6",              sub: t("productTypes") },
-            { label: t("outOfStock"),   value: String(outCount), sub: t("needsRestocking") },
-            { label: t("avgPrice"),     value: "$184",           sub: t("perUnit") },
-            { label: t("totalSkus"),    value: "8",              sub: t("activeListings") },
+            { label: t("pendingKpi2"),    value: String(pendingCount),                    sub: t("awaitingSub")     },
+            { label: t("completionRate"), value: `${completionRate}%`,                    sub: t("fulfilled")       },
+            { label: t("avgOrder"),       value: `TND ${avgOrderVal.toLocaleString()}`,   sub: t("perOrder")        },
+            { label: t("cancelled"),      value: String(cancelledCount),                  sub: t("thisMonth")       },
           ].map((s, i) => (
             <div key={i} className={`${card} px-5 py-4`}>
               <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-1">{s.label}</p>
@@ -132,19 +172,21 @@ export default function CatalogPage() {
           ))}
         </div>
 
-        {/* ── TABLE ── */}
+        {/* ── TABLE ──────────────────────────────────────────────────────── */}
         <div className={`${card} overflow-hidden`}>
           <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 dark:border-white/[0.05]">
             <div>
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("productCatalogTitle")}</h2>
-              <p className="text-xs text-gray-500">{filtered.length} of {PRODUCTS.length} {t("product")}s</p>
+              <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("allOrdersTitle")}</h2>
+              <p className="text-xs text-gray-500">
+                {filtered.length} {t("ofText")} {ORDERS.length} {t("orders")}
+              </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <div className="relative">
                 <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 <input
                   className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-300 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
-                  placeholder={t("searchProducts")}
+                  placeholder={t("searchOrders2")}
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
@@ -155,49 +197,71 @@ export default function CatalogPage() {
                 onChange={e => setFilter(e.target.value)}
               >
                 <option value="all">{t("allStatus")}</option>
-                <option value="in-stock">{t("inStockLabel")}</option>
-                <option value="low-stock">{t("lowStockLabel")}</option>
-                <option value="out-of-stock">{t("outOfStockLabel")}</option>
+                <option value="completed">{t("completed")}</option>
+                <option value="processing">{t("processing")}</option>
+                <option value="pending">{t("pending")}</option>
+                <option value="cancelled">{t("cancelled")}</option>
               </select>
+              <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-3 py-1.5 rounded-lg text-xs text-gray-500 dark:text-gray-400 transition">
+                <ArrowDownToLine size={12} /> {t("export")}
+              </button>
             </div>
           </div>
 
-          <div className="grid px-6 py-3 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-600 border-b border-gray-100 dark:border-white/[0.04]"
-            style={{ gridTemplateColumns: "2.5fr 1.2fr 1fr 0.8fr 1fr 1.2fr" }}>
-            <span>{t("product")}</span><span>{t("category")}</span><span>{t("price")}</span>
-            <span>{t("stock")}</span><span>SKU</span><span>{t("status")}</span>
+          {/* Table header */}
+          <div
+            className="grid px-6 py-3 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-600 border-b border-gray-100 dark:border-white/[0.04]"
+            style={{ gridTemplateColumns: "2.2fr 2.5fr 1.2fr 1.2fr 0.8fr" }}
+          >
+            <span>{t("order")}</span>
+            <span>{t("product")}</span>
+            <span>{t("amount")}</span>
+            <span>{t("status")}</span>
+            <span>{t("date")}</span>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="py-12 text-center text-xs text-gray-500 dark:text-gray-600">{t("noProductsMatch")}</div>
+            <div className="py-12 text-center text-xs text-gray-500 dark:text-gray-600">
+              {t("noOrdersMatch2")}
+            </div>
           ) : (
-            filtered.map((p, i) => {
-              const sc = STATUS_CONFIG[p.status];
+            filtered.map((order, i) => {
+              const sc = STATUS_CONFIG[order.status];
               return (
-                <div key={p.id}
+                <div
+                  key={order.id}
                   className={`grid px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-white/[0.02] transition ${i < filtered.length - 1 ? "border-b border-gray-100 dark:border-white/[0.03]" : ""}`}
-                  style={{ gridTemplateColumns: "2.5fr 1.2fr 1fr 0.8fr 1fr 1.2fr" }}>
+                  style={{ gridTemplateColumns: "2.2fr 2.5fr 1.2fr 1.2fr 0.8fr" }}
+                >
+                  {/* Customer + Order ID */}
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${AVATAR_COLORS[i % AVATAR_COLORS.length]}`}>
-                      {p.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                      {order.avatar}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-gray-900 dark:text-white">{p.name}</p>
-                      <p className="text-[10px] text-gray-400 dark:text-gray-600">{p.id}</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white">{order.customer}</p>
+                      <p className="text-[10px] text-gray-400 dark:text-gray-600">{order.id}</p>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{p.category}</p>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">${p.price.toFixed(2)}</p>
-                  <p className={`text-sm font-bold ${p.stock === 0 ? "text-red-400" : p.stock < 20 ? "text-amber-400" : "text-gray-900 dark:text-white"}`}>
-                    {p.stock.toLocaleString()}
+
+                  {/* Product */}
+                  <p className="text-xs text-gray-500 dark:text-gray-400 pr-4 truncate">{order.product}</p>
+
+                  {/* Amount in TND */}
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">
+                    TND {order.amount.toLocaleString()}
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 tracking-wider">{p.sku}</p>
+
+                  {/* Status badge */}
                   <div>
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${sc.badge}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
                       {sc.label}
                     </span>
                   </div>
+
+                  {/* Date */}
+                  <p className="text-[10px] text-gray-400 dark:text-gray-600">{order.date}</p>
                 </div>
               );
             })

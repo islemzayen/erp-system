@@ -32,6 +32,8 @@ export const translations = {
     budget: "Budget",
     promotions: "Promotions",
 
+    // --- Online Orders Page Header ---
+    onlineOrdersTitle: "Online",
 
     // --- Sales Dashboard ---
     onlineSalesDashboard: "Online Sales Dashboard",
@@ -63,6 +65,42 @@ export const translations = {
     shipment: "Shipment",
     todayChange: "-3 today",
 
+    // --- Budget Page ---
+    budgetManagement: "Budget Management",
+    newBudget: "+ New Budget",
+    totalBudget2: "Total Budget",
+    totalAllocated: "Total Allocated",
+    totalSpent: "Total Spent",
+    remaining: "Remaining",
+    budgetUtilization: "Budget Utilization",
+    overBudget: "Over Budget",
+    onTrack: "On Track",
+    underBudget: "Under Budget",
+    ytdSpend: "YTD Spend",
+    forecastedSpend: "Forecasted Spend",
+    budgetHealth: "Budget Health",
+    spendByDept: "Spend by Department",
+    monthlyBudgetTrend: "Monthly Budget Trend",
+    allocatedVsSpent: "Allocated vs Spent",
+    department: "Department",
+    spentCol: "Spent",
+    remainingCol: "Remaining",
+    utilization: "Utilization",
+    budgetItems: "Budget Items",
+    searchBudget: "Search budget...",
+    noBudgetMatch: "No items match your filter",
+    addBudgetItem: "Add Item",
+    variance: "Variance",
+    forecastVsActual: "Forecast vs Actual",
+    topSpenders: "Top Spenders",
+    budgetAlerts: "Budget Alerts",
+    approachingLimit: "Approaching Limit",
+    exceededBudget: "Exceeded Budget",
+    withinBudget: "Within Budget",
+    ytdProgress: "YTD Progress",
+    annualTarget: "Annual Target",
+    qtrBreakdown: "Quarterly Breakdown",
+
     // --- Catalog Page ---
     productCatalogTitle: "Product Catalog",
     addProduct: "Add Product",
@@ -88,7 +126,6 @@ export const translations = {
     tndEquivalent: "TND equivalent",
 
     // --- Orders Page ---
-    onlineOrders: "Online Orders",
     newOrder2: "New Order",
     totalOrdersKpi2: "Total Orders",
     completedKpi2: "Completed",
@@ -115,7 +152,6 @@ export const translations = {
     customer: "Customer",
 
     // --- Returns Page ---
-    returnsRefunds: "Returns & Refunds",
     newReturn: "New Return",
     totalReturns: "Total Returns",
     pendingReview: "Pending Review",
@@ -134,7 +170,6 @@ export const translations = {
     perReturn: "per return",
     notApproved: "not approved",
     actionNeeded: "action needed",
-    processed: "processed",
     inReturns: "in returns",
     requests: "requests",
 
@@ -353,7 +388,6 @@ export const translations = {
     pendingKpi: "Pending",
     awaitingAction: "awaiting action",
     rejectedKpi: "Rejected",
-    notApproved: "not approved",
     attendanceRecords: "Attendance Records",
     approveRequests: "Approve Requests",
     date: "Date",
@@ -384,6 +418,7 @@ export const translations = {
 
     // --- HR Performance ---
     performanceTracking: "Performance Tracking",
+    tracking: "Tracking",
     avgScore: "Avg Score",
     teamAverage: "team average",
     excellentCount: "Excellent",
@@ -398,7 +433,10 @@ export const translations = {
     rating: "Rating",
     addEvaluation: "+ Add Evaluation",
     topPerformersThisCycle: "Performance score this cycle",
+    performanceScoreThisCycle: "Performance score this cycle",
     noPerformanceMatch: "No records match your filter",
+    noRecordsMatch: "No records match your filter",
+    ratingBreakdown: "Rating Breakdown",
 
     // --- HR Reports ---
     hrReports: "HR Reports",
@@ -494,6 +532,7 @@ export const translations = {
     // --- Analytics Page ---
     emailOpenRate: "Email Open Rate",
     clickThroughRate: "Click-Through Rate",
+    conversionRate: "Conversion Rate",
     impressions: "Impressions",
     bounceRate: "Bounce Rate",
     avgSession: "Avg Session",
@@ -506,8 +545,8 @@ export const translations = {
     monthlyEmailCtr: "Monthly email open rate & CTR",
     avgOpenRate: "Avg Open Rate",
     avgCtr: "Avg CTR",
-    emailOpenRateChart: "Email Open Rate",
-    clickThroughRateChart: "Click-Through Rate",
+    emailOpenRateChart: "Email Open Rate (%)",
+    clickThroughRateChart: "Click-Through Rate (%)",
     channelPerformance: "Channel Performance",
     openCtrConv: "Open rate · CTR · Conversion",
 
@@ -522,14 +561,28 @@ export const translations = {
     campaignOverview: "Campaign Overview",
     avgConversion: "Avg Conversion",
     leadsPerMonth: "Leads Per Month",
-    conversionRate: "Conversion Rate",
-    conversionRateChart: "Conversion Rate",
+    conversionRateChart: "Conversion Rate (%)",
     topCampaigns: "Top Campaigns",
     leadsGeneratedThisMonth: "Leads generated this month",
     growthGoals: "Growth Goals",
     conversionRateTarget: "Conversion Rate Target",
     leadAcquisition: "Lead Acquisition",
     budgetEfficiency: "Budget Efficiency",
+
+    // --- Budget Marketing ---
+    addBudget: "Add Budget",
+    thisPeriod2: "this period",
+    budgetAllocation: "Budget Allocation",
+    searchCampaignPlaceholder: "Search campaign...",
+    monthlySpend: "Monthly Spend",
+    totalSpendPerMonth: "Total spend per month (TND)",
+    spend: "Spend",
+    budgetUtilisation: "Budget Utilisation",
+    left: "left",
+    critical: "Critical",
+    overBudgetRisk: "over-budget risk",
+    usage: "Usage",
+    used: "Used",
 
     // --- Segmentation ---
     customerSegmentation: "Customer Segmentation",
@@ -553,6 +606,20 @@ export const translations = {
     segmentSizes: "Segment Sizes",
     customersPerSegment: "Customers per segment",
     fastestGrowing: "Fastest Growing",
+
+    // --- Admin Sales Overview ---
+    adminSalesOverview: "Sales Overview",
+    onlineSalesOrders: "Online Sales",
+    totalRevenueTnd: "Total Revenue (TND)",
+    cancelledKpi: "Cancelled",
+    cancellationRate: "Cancellation Rate",
+    avgOrderTnd: "Avg Order (TND)",
+    processingKpiAdmin: "Processing",
+
+    // --- Management shared ---
+    management: "Management",
+    marketingBudgetTitle: "Marketing Budget",
+    promotionsTitle: "Promotions Management",
   },
 
   fr: {
@@ -573,7 +640,7 @@ export const translations = {
     payroll: "Paie",
     performance: "Performance",
     reports: "Rapports",
-    productCatalog: "Catalogue produits",
+    productCatalog: "Catalogue des produits",
     onlineOrders: "Commandes en ligne",
     stockProduction: "Stock & Production",
     deliveryTracking: "Suivi des livraisons",
@@ -584,6 +651,8 @@ export const translations = {
     budget: "Budget",
     promotions: "Promotions",
 
+    // --- Online Orders Page Header ---
+    onlineOrdersTitle: "En ligne",
 
     // --- Sales Dashboard ---
     onlineSalesDashboard: "Tableau de bord Ventes en ligne",
@@ -615,6 +684,42 @@ export const translations = {
     shipment: "Expédition",
     todayChange: "-3 aujourd'hui",
 
+    // --- Budget Page ---
+    budgetManagement: "Gestion du budget",
+    newBudget: "+ Nouveau budget",
+    totalBudget2: "Budget total",
+    totalAllocated: "Total alloué",
+    totalSpent: "Total dépensé",
+    remaining: "Restant",
+    budgetUtilization: "Utilisation du budget",
+    overBudget: "Dépassement",
+    onTrack: "Dans les limites",
+    underBudget: "Sous le budget",
+    ytdSpend: "Dépenses YTD",
+    forecastedSpend: "Dépenses prévisionnelles",
+    budgetHealth: "Santé du budget",
+    spendByDept: "Dépenses par département",
+    monthlyBudgetTrend: "Tendance budgétaire mensuelle",
+    allocatedVsSpent: "Alloué vs Dépensé",
+    department: "Département",
+    spentCol: "Dépensé",
+    remainingCol: "Restant",
+    utilization: "Utilisation",
+    budgetItems: "Postes budgétaires",
+    searchBudget: "Rechercher budget...",
+    noBudgetMatch: "Aucun élément ne correspond",
+    addBudgetItem: "Ajouter un poste",
+    variance: "Écart",
+    forecastVsActual: "Prévisions vs Réel",
+    topSpenders: "Plus gros postes",
+    budgetAlerts: "Alertes budget",
+    approachingLimit: "Approche limite",
+    exceededBudget: "Budget dépassé",
+    withinBudget: "Dans le budget",
+    ytdProgress: "Progression YTD",
+    annualTarget: "Objectif annuel",
+    qtrBreakdown: "Répartition trimestrielle",
+
     // --- Catalog Page ---
     productCatalogTitle: "Catalogue Produits",
     addProduct: "Ajouter un produit",
@@ -640,7 +745,6 @@ export const translations = {
     tndEquivalent: "équivalent TND",
 
     // --- Orders Page ---
-    onlineOrders: "Commandes en Ligne",
     newOrder2: "Nouvelle Commande",
     totalOrdersKpi2: "Total Commandes",
     completedKpi2: "Terminées",
@@ -667,7 +771,6 @@ export const translations = {
     customer: "Client",
 
     // --- Returns Page ---
-    returnsRefunds: "Retours & Remboursements",
     newReturn: "Nouveau Retour",
     totalReturns: "Total Retours",
     pendingReview: "En Attente d'Examen",
@@ -686,7 +789,6 @@ export const translations = {
     perReturn: "par retour",
     notApproved: "non approuvé",
     actionNeeded: "action requise",
-    processed: "traités",
     inReturns: "en retours",
     requests: "demandes",
 
@@ -905,7 +1007,6 @@ export const translations = {
     pendingKpi: "En attente",
     awaitingAction: "action requise",
     rejectedKpi: "Rejetées",
-    notApproved: "non approuvées",
     attendanceRecords: "Registre de présence",
     approveRequests: "Approuver les demandes",
     date: "Date",
@@ -919,7 +1020,7 @@ export const translations = {
     unauthorized: "Non autorisé",
 
     // --- HR Payroll ---
-    payrollManagement: "Gestion de la paie",
+    payrollManagement: "Gestion de Paiement",
     totalNetPayroll: "Paie nette totale",
     totalBonuses: "Total primes",
     distributed: "distribuées",
@@ -936,6 +1037,7 @@ export const translations = {
 
     // --- HR Performance ---
     performanceTracking: "Suivi des performances",
+    tracking: "Suivi de ",
     avgScore: "Score moy.",
     teamAverage: "moyenne équipe",
     excellentCount: "Excellent",
@@ -950,7 +1052,10 @@ export const translations = {
     rating: "Note",
     addEvaluation: "+ Ajouter une évaluation",
     topPerformersThisCycle: "Score de performance ce cycle",
+    performanceScoreThisCycle: "Score de performance ce cycle",
     noPerformanceMatch: "Aucun enregistrement ne correspond",
+    noRecordsMatch: "Aucun enregistrement ne correspond",
+    ratingBreakdown: "Répartition des notes",
 
     // --- HR Reports ---
     hrReports: "Rapports RH",
@@ -995,7 +1100,6 @@ export const translations = {
     revenueThisPeriod: "revenus sur la période",
     recentOrders: "Commandes récentes",
     orderId: "N° commande",
-    customer: "Client",
     product: "Produit",
     totalTND: "Total (TND)",
     noOrdersMatch: "Aucune commande ne correspond",
@@ -1047,6 +1151,7 @@ export const translations = {
     // --- Analytics Page ---
     emailOpenRate: "Taux d'ouverture email",
     clickThroughRate: "Taux de clics",
+    conversionRate: "Taux de conversion",
     impressions: "Impressions",
     bounceRate: "Taux de rebond",
     avgSession: "Session moy.",
@@ -1059,8 +1164,8 @@ export const translations = {
     monthlyEmailCtr: "Taux d'ouverture & CTR mensuels",
     avgOpenRate: "Taux d'ouverture moy.",
     avgCtr: "CTR moy.",
-    emailOpenRateChart: "Taux d'ouverture email",
-    clickThroughRateChart: "Taux de clics",
+    emailOpenRateChart: "Taux d'ouverture email (%)",
+    clickThroughRateChart: "Taux de clics (%)",
     channelPerformance: "Performance par canal",
     openCtrConv: "Ouverture · CTR · Conversion",
 
@@ -1075,8 +1180,7 @@ export const translations = {
     campaignOverview: "Aperçu des campagnes",
     avgConversion: "Conversion moy.",
     leadsPerMonth: "Leads par mois",
-    conversionRate: "Taux de conversion",
-    conversionRateChart: "Taux de conversion",
+    conversionRateChart: "Taux de conversion (%)",
     topCampaigns: "Meilleures campagnes",
     leadsGeneratedThisMonth: "Leads générés ce mois",
     growthGoals: "Objectifs de croissance",
@@ -1084,8 +1188,23 @@ export const translations = {
     leadAcquisition: "Acquisition de leads",
     budgetEfficiency: "Efficacité budgétaire",
 
+    // --- Budget Marketing ---
+    addBudget: "Ajouter un budget",
+    thisPeriod2: "cette période",
+    budgetAllocation: "Répartition du budget",
+    searchCampaignPlaceholder: "Rechercher une campagne...",
+    monthlySpend: "Dépenses mensuelles",
+    totalSpendPerMonth: "Dépenses totales par mois (TND)",
+    spend: "Dépenses",
+    budgetUtilisation: "Utilisation du budget",
+    left: "restant",
+    critical: "Critique",
+    overBudgetRisk: "risque de dépassement",
+    usage: "Utilisation",
+    used: "Utilisé",
+
     // --- Segmentation ---
-    customerSegmentation: "Segmentation clients",
+    customerSegmentation: "Segmentation des clients",
     segmentationSubtitle: "Fév 2026 · EMM ERP · v2.4",
     newSegment: "+ Nouveau segment",
     totalCustomers: "Total clients",
@@ -1106,6 +1225,20 @@ export const translations = {
     segmentSizes: "Taille des segments",
     customersPerSegment: "Clients par segment",
     fastestGrowing: "Croissance la plus rapide",
+
+    // --- Admin Sales Overview ---
+    adminSalesOverview: "Aperçu des ventes",
+    onlineSalesOrders: "Ventes en ligne",
+    totalRevenueTnd: "Chiffre d'affaires (TND)",
+    cancelledKpi: "Annulées",
+    cancellationRate: "Taux d'annulation",
+    avgOrderTnd: "Commande moy. (TND)",
+    processingKpiAdmin: "En cours",
+
+    // --- Management shared ---
+    management: "Gestion",
+    marketingBudgetTitle: "Budget de Marketing",
+    promotionsTitle: "Gestion des Promotions",
   },
 } as const;
 

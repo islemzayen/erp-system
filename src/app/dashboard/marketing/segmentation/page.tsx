@@ -70,7 +70,10 @@ export default function SegmentationPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight leading-none">
-              Customer <span className="text-emerald-400">{t("segmentation")}</span>
+              {t("customerSegmentation").split(" ")[0]}{" "}
+              <span className="text-emerald-400">
+                {t("customerSegmentation").split(" ").slice(1).join(" ")}
+              </span>
             </h1>
             <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">
               {t("segmentationSubtitle")}
@@ -78,8 +81,7 @@ export default function SegmentationPage() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
-              {t("live")}
+              
             </span>
             <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
               <Download size={13} /> {t("export")}
@@ -151,7 +153,7 @@ export default function SegmentationPage() {
             </div>
 
             {filtered.length === 0 ? (
-              <div className="py-12 text-center text-xs text-gray-400">{t("noSegmentsMatch")}</div>
+              <div className="py-12 text-center text-xs text-gray-400 dark:text-gray-600">{t("noSegmentsMatch")}</div>
             ) : (
               filtered.map((s, i) => {
                 const sc = STATUS_CONFIG[s.status];
@@ -190,7 +192,6 @@ export default function SegmentationPage() {
               </ReBarChart>
             </ResponsiveContainer>
 
-            {/* Growth leaders */}
             <div className="mt-4 space-y-3">
               <p className="text-[10px] uppercase tracking-widest text-gray-500">{t("fastestGrowing")}</p>
               {segments.filter(s => s.status === "Growing").slice(0, 3).map((s, i) => (

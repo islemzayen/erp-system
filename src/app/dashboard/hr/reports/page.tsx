@@ -72,7 +72,6 @@ export default function HRReports() {
             </div>
             <div className="flex items-center gap-3">
               <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />{t("live")}
               </span>
               <button className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-black font-bold">
                 <Download size={13} /> {t("exportAll")}

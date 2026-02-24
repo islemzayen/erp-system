@@ -3,16 +3,16 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Tag, Search, Plus, Download, Percent, Calendar, CheckCircle, Clock } from "lucide-react";
+import { Tag, Search, Plus, Download, Percent, Calendar, CheckCircle } from "lucide-react";
 import { useState } from "react";
 
 const promotions = [
-  { name: "Black Friday Sale",  discount: "30%", type: "Seasonal", status: "Active",    start: "20 Nov 2025", end: "30 Nov 2025", code: "BF2025",   reach: "8,400" },
-  { name: "New Year Offer",     discount: "20%", type: "Seasonal", status: "Scheduled", start: "01 Jan 2026", end: "07 Jan 2026", code: "NY2026",   reach: "—"     },
-  { name: "Loyalty Discount",   discount: "15%", type: "Loyalty",  status: "Active",    start: "01 Jan 2026", end: "Ongoing",     code: "LOYAL15",  reach: "1,250" },
-  { name: "Referral Bonus",     discount: "10%", type: "Referral", status: "Active",    start: "15 Fév 2026", end: "15 Mar 2026", code: "REF10",    reach: "320"   },
-  { name: "Spring Clearance",   discount: "25%", type: "Seasonal", status: "Scheduled", start: "01 Mar 2026", end: "15 Mar 2026", code: "SPRING25", reach: "—"     },
-  { name: "VIP Early Access",   discount: "12%", type: "VIP",      status: "Completed", start: "10 Jan 2026", end: "20 Jan 2026", code: "VIP12",    reach: "540"   },
+  { name: "Black Friday Sale",   discount: "30%", type: "Seasonal",   status: "Active",    start: "20 Nov 2025", end: "30 Nov 2025", code: "BF2025"   },
+  { name: "New Year Offer",      discount: "20%", type: "Seasonal",   status: "Scheduled", start: "01 Jan 2026", end: "07 Jan 2026", code: "NY2026"   },
+  { name: "Loyalty Discount",    discount: "15%", type: "Loyalty",    status: "Active",    start: "01 Jan 2026", end: "Ongoing",     code: "LOYAL15"  },
+  { name: "Referral Bonus",      discount: "10%", type: "Referral",   status: "Active",    start: "15 Fév 2026", end: "15 Mar 2026", code: "REF10"    },
+  { name: "Spring Clearance",    discount: "25%", type: "Seasonal",   status: "Scheduled", start: "01 Mar 2026", end: "15 Mar 2026", code: "SPRING25" },
+  { name: "VIP Early Access",    discount: "12%", type: "VIP",        status: "Completed", start: "10 Jan 2026", end: "20 Jan 2026", code: "VIP12"    },
 ];
 
 const STATUS_CONFIG: Record<string, { badge: string; dot: string }> = {
@@ -60,16 +60,14 @@ export default function PromotionsPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight leading-none">
-              {t("promotions")} <span className="text-emerald-400">{t("promotionsManagement").split(" ").slice(1).join(" ")}</span>
+              {t("promotionsTitle").split(" ")[0]}{" "}
+              <span className="text-emerald-400">{t("promotionsTitle").split(" ").slice(1).join(" ")}</span>
             </h1>
-            <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">
-              {t("promotionsSubtitle")}
-            </p>
+            <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">Fév 2026 · EMM ERP · v2.4</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
-              {t("live")}
+              
             </span>
             <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
               <Download size={13} /> {t("export")}
@@ -83,10 +81,10 @@ export default function PromotionsPage() {
         {/* ── KPI STRIP ── */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           {[
-            { label: t("totalPromos"),  value: String(promotions.length), sub: t("allTime"),          icon: <Tag size={14} />,         iconBg: "bg-emerald-500/10 text-emerald-400" },
-            { label: t("active"),       value: String(activeCount),       sub: t("runningNow"),        icon: <CheckCircle size={14} />, iconBg: "bg-blue-500/10 text-blue-400" },
-            { label: t("scheduledKpi"), value: String(scheduledCount),    sub: t("upcoming"),          icon: <Calendar size={14} />,   iconBg: "bg-amber-500/10 text-amber-400" },
-            { label: t("avgDiscount"),  value: "18.7%",                   sub: t("acrossAllPromos"),   icon: <Percent size={14} />,    iconBg: "bg-purple-500/10 text-purple-400" },
+            { label: t("totalPromos"),  value: String(promotions.length), sub: t("allTime"),        icon: <Tag size={14} />,         iconBg: "bg-emerald-500/10 text-emerald-400" },
+            { label: t("active"),       value: String(activeCount),       sub: t("runningNow"),     icon: <CheckCircle size={14} />, iconBg: "bg-blue-500/10 text-blue-400" },
+            { label: t("scheduled"),    value: String(scheduledCount),    sub: t("upcoming"),       icon: <Calendar size={14} />,   iconBg: "bg-amber-500/10 text-amber-400" },
+            { label: t("avgDiscount"),  value: "18.7%",                   sub: t("acrossAllPromos"),icon: <Percent size={14} />,    iconBg: "bg-purple-500/10 text-purple-400" },
           ].map((s, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
               className={`${card} px-5 py-4 flex items-center gap-4`}>
@@ -105,20 +103,20 @@ export default function PromotionsPage() {
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5 border-b border-gray-200 dark:border-white/[0.05]">
             <div>
               <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("allPromotions")}</h2>
-              <p className="text-xs text-gray-500">{filtered.length} {t("ofText")} {promotions.length} {t("promotions").toLowerCase()}</p>
+              <p className="text-xs text-gray-500">{filtered.length} {t("ofText")} {promotions.length} {t("promotions")}</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                 <input
-                  className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
+                  className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-300 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
                   placeholder={t("searchPromotion")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
               <select
-                className="px-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-600 dark:text-gray-300 focus:outline-none focus:border-emerald-500/40 transition"
+                className="px-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-300 dark:border-white/10 rounded-lg text-xs text-gray-700 dark:text-gray-300 focus:outline-none focus:border-emerald-500/40 transition"
                 value={filterStatus}
                 onChange={(e) => setFilter(e.target.value)}
               >
@@ -130,14 +128,14 @@ export default function PromotionsPage() {
             </div>
           </div>
 
-          <div className="grid px-6 py-3 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-600 border-b border-gray-100 dark:border-white/[0.04]"
+          <div className="grid px-6 py-3 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-600 border-b border-gray-200 dark:border-white/[0.04]"
             style={{ gridTemplateColumns: "2fr 0.8fr 1fr 1fr 1.2fr 1.2fr 1fr" }}>
             <span>{t("promotion")}</span><span>{t("discount")}</span><span>{t("type")}</span>
             <span>{t("code")}</span><span>{t("start")}</span><span>{t("end")}</span><span>{t("status")}</span>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="py-12 text-center text-xs text-gray-400">{t("noPromotionsMatch")}</div>
+            <div className="py-12 text-center text-xs text-gray-400 dark:text-gray-600">{t("noPromotionsMatch")}</div>
           ) : (
             filtered.map((p, i) => {
               const sc = STATUS_CONFIG[p.status];

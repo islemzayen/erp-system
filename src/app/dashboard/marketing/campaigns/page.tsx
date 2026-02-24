@@ -3,7 +3,7 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Megaphone, Search, Plus, Download, TrendingUp, Users, DollarSign, Play } from "lucide-react";
+import { Megaphone, Search, Plus, Download, Users, DollarSign, Play } from "lucide-react";
 import { useState } from "react";
 
 const campaigns = [
@@ -60,20 +60,16 @@ export default function CampaignsPage() {
     <DashboardLayout>
       <div className="min-h-screen bg-gray-100 dark:bg-[#060a0f] text-gray-900 dark:text-white font-mono p-6 space-y-6 transition-colors duration-300">
 
-        {/* ── HEADER ── */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight leading-none">
-              Campaign <span className="text-emerald-400">{t("campaignManagement").split(" ").slice(1).join(" ")}</span>
+              {t("campaignManagement").split(" ")[0]} <span className="text-emerald-400">{t("campaignManagement").split(" ").slice(1).join(" ")}</span>
             </h1>
-            <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">
-              {t("campaignSubtitle")}
-            </p>
+            <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">{t("campaignSubtitle")}</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
-              {t("live")}
+              
             </span>
             <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
               <Download size={13} /> {t("export")}
@@ -84,13 +80,12 @@ export default function CampaignsPage() {
           </div>
         </div>
 
-        {/* ── KPI STRIP ── */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           {[
-            { label: t("totalCampaigns"), value: String(campaigns.length),                         sub: t("allTime"),   icon: <Megaphone size={14} />,   iconBg: "bg-emerald-500/10 text-emerald-400" },
-            { label: t("activeNow"),      value: String(activeCount),                              sub: t("running"),   icon: <Play size={14} />,        iconBg: "bg-blue-500/10 text-blue-400" },
-            { label: t("totalLeads"),     value: totalLeads.toLocaleString(),                      sub: t("generated"), icon: <Users size={14} />,       iconBg: "bg-amber-500/10 text-amber-400" },
-            { label: t("totalBudget"),    value: `${totalBudgetNum.toLocaleString()} TND`,         sub: t("allocated"), icon: <DollarSign size={14} />,  iconBg: "bg-purple-500/10 text-purple-400" },
+            { label: t("totalCampaigns"), value: String(campaigns.length),                sub: t("allTime"),   icon: <Megaphone size={14} />,  iconBg: "bg-emerald-500/10 text-emerald-400" },
+            { label: t("activeNow"),      value: String(activeCount),                     sub: t("running"),   icon: <Play size={14} />,       iconBg: "bg-blue-500/10 text-blue-400" },
+            { label: t("totalLeads"),     value: totalLeads.toLocaleString(),              sub: t("generated"), icon: <Users size={14} />,      iconBg: "bg-amber-500/10 text-amber-400" },
+            { label: t("totalBudget"),    value: `${totalBudgetNum.toLocaleString()} TND`, sub: t("allocated"), icon: <DollarSign size={14} />, iconBg: "bg-purple-500/10 text-purple-400" },
           ].map((s, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
               className={`${card} px-5 py-4 flex items-center gap-4`}>
@@ -104,7 +99,6 @@ export default function CampaignsPage() {
           ))}
         </div>
 
-        {/* ── TABLE ── */}
         <div className={`${card} overflow-hidden`}>
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-5 border-b border-gray-200 dark:border-white/[0.05]">
             <div>
@@ -142,7 +136,7 @@ export default function CampaignsPage() {
           </div>
 
           {filtered.length === 0 ? (
-            <div className="py-12 text-center text-xs text-gray-400">{t("noCampaignsMatch")}</div>
+            <div className="py-12 text-center text-xs text-gray-400 dark:text-gray-600">{t("noCampaignsMatch")}</div>
           ) : (
             filtered.map((c, i) => {
               const sc = STATUS_CONFIG[c.status];
@@ -151,17 +145,11 @@ export default function CampaignsPage() {
                 <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
                   className={`grid px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-white/[0.02] transition ${i < filtered.length - 1 ? "border-b border-gray-100 dark:border-white/[0.03]" : ""}`}
                   style={{ gridTemplateColumns: "2fr 1fr 1fr 1.4fr 1fr 1.2fr" }}>
-
                   <p className="text-sm font-bold text-gray-900 dark:text-white">{c.name}</p>
-
                   <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold w-fit ${ch}`}>{c.channel}</span>
-
                   <p className="text-xs text-gray-900 dark:text-white font-bold">{c.leads > 0 ? c.leads.toLocaleString() : "—"}</p>
-
                   <p className="text-xs text-gray-600 dark:text-gray-300">{c.budget}</p>
-
                   <p className="text-xs text-blue-400 font-bold">{c.spend}</p>
-
                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold w-fit ${sc.badge}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
                     {statusLabel(c.status)}

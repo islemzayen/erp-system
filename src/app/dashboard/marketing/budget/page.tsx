@@ -3,47 +3,49 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
-import { Mail, MousePointerClick, TrendingUp, Download, Eye } from "lucide-react";
+import { DollarSign, Search, Plus, Download, TrendingUp, AlertCircle, PieChart } from "lucide-react";
 import { useState } from "react";
 import {
-  LineChart, Line, BarChart as ReBarChart, Bar,
+  BarChart as ReBarChart, Bar,
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 
-function Sparkline({ data, dataKey, color }: { data: any[]; dataKey: string; color: string }) {
-  return (
-    <ResponsiveContainer width="100%" height={48}>
-      <LineChart data={data}>
-        <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} dot={false} />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-}
-
-const openRateData    = [{ v:38 },{ v:41 },{ v:40 },{ v:43 },{ v:44 },{ v:45 }];
-const ctrData         = [{ v:14 },{ v:16 },{ v:15 },{ v:17 },{ v:18 },{ v:18 }];
-const conversionData  = [{ v:5.2 },{ v:6.0 },{ v:6.5 },{ v:6.8 },{ v:7.0 },{ v:7.0 }];
-const impressionsData = [{ v:42000 },{ v:48000 },{ v:45000 },{ v:51000 },{ v:54000 },{ v:57000 }];
-
-const monthlyMetrics = [
-  { month: "Jan", open: 38, ctr: 14 },
-  { month: "Fév", open: 41, ctr: 16 },
-  { month: "Mar", open: 40, ctr: 15 },
-  { month: "Avr", open: 43, ctr: 17 },
-  { month: "Mai", open: 44, ctr: 18 },
-  { month: "Jun", open: 45, ctr: 18 },
+const budgets = [
+  { campaign: "Google Ads Q1",       allocated: 24500, used: 19800, remaining: 4700,  status: "On Track"   },
+  { campaign: "Spring Launch Email", allocated: 10500, used: 6500,  remaining: 4000,  status: "On Track"   },
+  { campaign: "Instagram Boost",     allocated: 7800,  used: 7200,  remaining: 600,   status: "Critical"   },
+  { campaign: "LinkedIn B2B",        allocated: 17250, used: 9800,  remaining: 7450,  status: "On Track"   },
+  { campaign: "Black Friday Teaser", allocated: 12000, used: 0,     remaining: 12000, status: "Not Started"},
+  { campaign: "Display Retargeting", allocated: 5000,  used: 3100,  remaining: 1900,  status: "On Track"   },
 ];
 
-const channelPerf = [
-  { channel: "Email",   open: 45, ctr: 18, conv: 7.0 },
-  { channel: "PPC",     open: 62, ctr: 24, conv: 9.2 },
-  { channel: "Social",  open: 31, ctr: 11, conv: 4.8 },
-  { channel: "Display", open: 18, ctr:  6, conv: 2.1 },
+const monthlySpend = [
+  { month: "Jan", spend: 9500  },
+  { month: "Fév", spend: 11200 },
+  { month: "Mar", spend: 10800 },
+  { month: "Avr", spend: 13500 },
+  { month: "Mai", spend: 12600 },
+  { month: "Jun", spend: 14400 },
 ];
 
-export default function AnalyticsPage() {
+const STATUS_CONFIG: Record<string, { badge: string; dot: string }> = {
+  "On Track":    { badge: "bg-emerald-500/15 text-emerald-400", dot: "bg-emerald-400" },
+  "Critical":    { badge: "bg-red-500/15 text-red-400",         dot: "bg-red-400" },
+  "Not Started": { badge: "bg-gray-500/15 text-gray-400",       dot: "bg-gray-500" },
+};
+
+export default function BudgetPage() {
   const { t } = useLanguage();
-  const [activeRange, setActiveRange] = useState<"6m" | "3m" | "1m">("6m");
+  const [search, setSearch] = useState("");
+
+  const filtered = budgets.filter(b =>
+    b.campaign.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalAllocated = budgets.reduce((s, b) => s + b.allocated, 0);
+  const totalUsed      = budgets.reduce((s, b) => s + b.used, 0);
+  const totalRemaining = totalAllocated - totalUsed;
+  const usedPct        = Math.round((totalUsed / totalAllocated) * 100);
 
   const card = "bg-white dark:bg-[#0d1117] border border-gray-200 dark:border-white/[0.06] rounded-2xl transition-colors duration-300";
   const tooltipStyle = { backgroundColor: "#0d1117", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "10px", fontSize: "11px" };
@@ -56,138 +58,133 @@ export default function AnalyticsPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight leading-none">
-              {t("marketing")} <span className="text-emerald-400">{t("analytics")}</span>
+              {t("marketingBudgetTitle").split(" ")[0]}{" "}
+              <span className="text-emerald-400">
+                {t("marketingBudgetTitle").split(" ").slice(1).join(" ")}
+              </span>
             </h1>
             <p className="text-xs text-gray-500 mt-1.5 uppercase tracking-widest">Fév 2026 · EMM ERP · v2.4</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-emerald-400 text-xs uppercase tracking-widest flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse inline-block" />
-              {t("live")}
+              
             </span>
             <button className="flex items-center gap-2 border border-gray-300 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/20 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-gray-600 dark:text-gray-300">
               <Download size={13} /> {t("export")}
             </button>
+            <button className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 px-4 py-2 rounded-xl text-xs uppercase tracking-wide transition text-black font-bold">
+              <Plus size={13} /> {t("addBudget")}
+            </button>
           </div>
         </div>
 
-        {/* ── TOP KPI CARDS ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {/* ── KPI STRIP ── */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
           {[
-            { icon: <Mail size={16} />,             iconBg: "bg-emerald-500/10 text-emerald-400", badge: "+3.2%", badgeColor: "text-emerald-400", label: t("emailOpenRate"),    value: "45%",    valueColor: "text-emerald-400", spark: openRateData,    sparkColor: "#10b981" },
-            { icon: <MousePointerClick size={16} />, iconBg: "bg-blue-500/10 text-blue-400",       badge: "+2.1%", badgeColor: "text-blue-400",    label: t("clickThroughRate"), value: "18%",    valueColor: "text-blue-400",    spark: ctrData,         sparkColor: "#60a5fa" },
-            { icon: <TrendingUp size={16} />,        iconBg: "bg-amber-500/10 text-amber-400",     badge: "+1.8%", badgeColor: "text-amber-400",   label: t("conversionRate"),   value: "7%",     valueColor: "text-amber-400",   spark: conversionData,  sparkColor: "#f59e0b" },
-            { icon: <Eye size={16} />,               iconBg: "bg-purple-500/10 text-purple-400",   badge: "+5.6%", badgeColor: "text-purple-400",  label: t("impressions"),      value: "57,000", valueColor: "text-purple-400",  spark: impressionsData, sparkColor: "#a78bfa" },
-          ].map((kpi, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
-              className={`${card} p-5 flex flex-col gap-3`}>
-              <div className="flex items-start justify-between">
-                <div className={`p-2 rounded-xl ${kpi.iconBg}`}>{kpi.icon}</div>
-                <span className={`text-xs font-bold ${kpi.badgeColor}`}>{kpi.badge}</span>
+            { label: t("totalAllocated"), value: `${totalAllocated.toLocaleString()} TND`, sub: t("thisPeriod"),     icon: <DollarSign size={14} />,  iconBg: "bg-emerald-500/10 text-emerald-400" },
+            { label: t("totalSpent"),     value: `${totalUsed.toLocaleString()} TND`,      sub: `${usedPct}% used`,  icon: <TrendingUp size={14} />,  iconBg: "bg-blue-500/10 text-blue-400" },
+            { label: t("remaining"),      value: `${totalRemaining.toLocaleString()} TND`, sub: t("available"),      icon: <PieChart size={14} />,    iconBg: "bg-purple-500/10 text-purple-400" },
+            { label: t("critical"),       value: String(budgets.filter(b => b.status === "Critical").length), sub: t("overBudgetRisk"), icon: <AlertCircle size={14} />, iconBg: "bg-red-500/10 text-red-400" },
+          ].map((s, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+              className={`${card} px-5 py-4 flex items-center gap-4`}>
+              <div className={`p-2 rounded-xl ${s.iconBg}`}>{s.icon}</div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-0.5">{s.label}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">{s.value}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{s.sub}</p>
               </div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-500">{kpi.label}</p>
-              <p className={`text-3xl font-bold tracking-tight ${kpi.valueColor}`}>{kpi.value}</p>
-              <div className="-mx-1"><Sparkline data={kpi.spark} dataKey="v" color={kpi.sparkColor} /></div>
             </motion.div>
           ))}
         </div>
 
-        {/* ── SECONDARY KPI STRIP ── */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-          {[
-            { label: t("bounceRate"),   value: "32%",   sub: "-4% vs last month" },
-            { label: t("avgSession"),   value: "2m 48s",sub: t("timeOnSite") },
-            { label: t("totalReach"),   value: "84K",   sub: t("uniqueVisitors") },
-            { label: t("unsubscribes"), value: "0.4%",  sub: t("emailList") },
-          ].map((s, i) => (
-            <div key={i} className={`${card} px-5 py-4`}>
-              <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-1">{s.label}</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{s.value}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{s.sub}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* ── BOTTOM: Charts + Channel Performance ── */}
+        {/* ── BOTTOM: Table + Chart ── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
 
-          {/* Charts (2/3) */}
-          <div className={`${card} p-6 xl:col-span-2 space-y-2`}>
-            <div className="flex items-start justify-between">
+          {/* Table (2/3) */}
+          <div className={`${card} overflow-hidden xl:col-span-2`}>
+            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200 dark:border-white/[0.05]">
               <div>
-                <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("performanceTrends")}</h2>
-                <p className="text-xs text-gray-500">{t("monthlyEmailCtr")}</p>
+                <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("budgetAllocation")}</h2>
+                <p className="text-xs text-gray-500">{filtered.length} of {budgets.length} {t("campaigns")}</p>
               </div>
-              <div className="flex gap-1">
-                {(["6m", "3m", "1m"] as const).map((r) => (
-                  <button key={r} onClick={() => setActiveRange(r)}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition ${activeRange === r ? "bg-emerald-500 text-black" : "text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}>
-                    {r}
-                  </button>
-                ))}
+              <div className="relative">
+                <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <input
+                  className="pl-8 pr-3 py-1.5 bg-gray-100 dark:bg-black/30 border border-gray-300 dark:border-white/10 rounded-lg text-xs focus:outline-none focus:border-emerald-500/40 transition text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600"
+                  placeholder={t("searchCampaign")}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
               </div>
             </div>
-            <div className="flex gap-8 py-2">
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-gray-500">{t("avgOpenRate")}</p>
-                <p className="text-2xl font-bold text-emerald-400">41.8%</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-gray-500">{t("avgCtr")}</p>
-                <p className="text-2xl font-bold text-blue-400">16.3%</p>
-              </div>
+
+            <div className="grid px-6 py-3 text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-600 border-b border-gray-200 dark:border-white/[0.04]"
+              style={{ gridTemplateColumns: "2fr 1.2fr 1.2fr 1.2fr 1.5fr 1.5fr" }}>
+              <span>{t("campaign")}</span><span>{t("allocated")}</span><span>{t("used")}</span>
+              <span>{t("remaining")}</span><span>{t("usage")}</span><span>{t("status")}</span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-2">{t("emailOpenRateChart")}</p>
-                <ResponsiveContainer width="100%" height={180}>
-                  <ReBarChart data={monthlyMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#9ca3af" tick={{ fontSize: 11 }} />
-                    <YAxis stroke="#9ca3af" tick={{ fontSize: 11 }} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Bar dataKey="open" fill="#10b981" radius={[4, 4, 0, 0]} />
-                  </ReBarChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-gray-500 mb-2">{t("clickThroughRateChart")}</p>
-                <ResponsiveContainer width="100%" height={180}>
-                  <LineChart data={monthlyMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="month" stroke="#9ca3af" tick={{ fontSize: 11 }} />
-                    <YAxis stroke="#9ca3af" tick={{ fontSize: 11 }} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Line type="monotone" dataKey="ctr" stroke="#60a5fa" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+
+            {filtered.map((b, i) => {
+              const sc  = STATUS_CONFIG[b.status];
+              const pct = b.allocated > 0 ? Math.round((b.used / b.allocated) * 100) : 0;
+              return (
+                <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
+                  className={`grid px-6 py-4 items-center hover:bg-gray-50 dark:hover:bg-white/[0.02] transition ${i < filtered.length - 1 ? "border-b border-gray-100 dark:border-white/[0.03]" : ""}`}
+                  style={{ gridTemplateColumns: "2fr 1.2fr 1.2fr 1.2fr 1.5fr 1.5fr" }}>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">{b.campaign}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-300">{b.allocated.toLocaleString()}</p>
+                  <p className="text-xs text-blue-400 font-bold">{b.used.toLocaleString()}</p>
+                  <p className={`text-xs font-bold ${b.remaining < 1000 && b.remaining > 0 ? "text-amber-400" : "text-gray-600 dark:text-gray-300"}`}>{b.remaining.toLocaleString()}</p>
+                  <div className="pr-4">
+                    <div className="flex justify-between mb-1">
+                      <span className="text-[10px] text-gray-500 dark:text-gray-600">{pct}%</span>
+                    </div>
+                    <div className="h-1 bg-gray-200 dark:bg-white/5 rounded-full overflow-hidden">
+                      <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+                        transition={{ delay: 0.3 + i * 0.05, duration: 0.5 }}
+                        className={`h-full rounded-full ${pct >= 90 ? "bg-red-500" : pct >= 70 ? "bg-amber-500" : "bg-emerald-500"}`} />
+                    </div>
+                  </div>
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold w-fit ${sc.badge}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                    {b.status}
+                  </span>
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Channel Performance (1/3) */}
+          {/* Monthly Spend Chart (1/3) */}
           <div className={`${card} p-6`}>
-            <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("channelPerformance")}</h2>
-            <p className="text-xs text-gray-500 mb-5">{t("openCtrConv")}</p>
-            <div className="space-y-5">
-              {channelPerf.map((c, i) => (
-                <div key={i}>
-                  <div className="flex justify-between items-baseline mb-1.5">
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">{c.channel}</span>
-                    <span className="text-emerald-400 text-sm font-bold">{c.conv}%</span>
-                  </div>
-                  <div className="h-1 bg-gray-200 dark:bg-white/5 rounded-full overflow-hidden mb-1">
-                    <motion.div initial={{ width: 0 }} animate={{ width: `${c.open}%` }}
-                      transition={{ delay: 0.3 + i * 0.07, duration: 0.6 }}
-                      className="h-full bg-emerald-500 rounded-full" />
-                  </div>
-                  <div className="flex gap-4 text-[10px] text-gray-500 dark:text-gray-600">
-                    <span>Open {c.open}%</span>
-                    <span>CTR {c.ctr}%</span>
-                    <span>Conv {c.conv}%</span>
-                  </div>
-                </div>
-              ))}
+            <h2 className="text-base font-bold text-gray-900 dark:text-white">{t("monthlySpend")}</h2>
+            <p className="text-xs text-gray-500 mb-4">{t("totalSpendPerMonth")}</p>
+            <ResponsiveContainer width="100%" height={200}>
+              <ReBarChart data={monthlySpend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" stroke="#9ca3af" tick={{ fontSize: 11 }} />
+                <YAxis stroke="#9ca3af" tick={{ fontSize: 11 }} />
+                <Tooltip contentStyle={tooltipStyle}
+                  formatter={(v) => [`${(v as number).toLocaleString()} TND`, t("spend")]} />
+                <Bar dataKey="spend" fill="#60a5fa" radius={[4, 4, 0, 0]} />
+              </ReBarChart>
+            </ResponsiveContainer>
+
+            {/* Budget utilisation goal */}
+            <div className="mt-6 p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/15">
+              <div className="flex justify-between mb-2">
+                <span className="text-xs font-bold text-gray-700 dark:text-white/70">{t("budgetUtilisation")}</span>
+                <span className="text-xs font-bold text-emerald-400">{usedPct}%</span>
+              </div>
+              <div className="h-1.5 bg-gray-200 dark:bg-white/5 rounded-full overflow-hidden">
+                <motion.div initial={{ width: 0 }} animate={{ width: `${usedPct}%` }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-blue-500" />
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="text-[10px] text-gray-500 dark:text-gray-600">{totalUsed.toLocaleString()} / {totalAllocated.toLocaleString()} TND</span>
+                <span className="text-[10px] text-amber-400">{totalRemaining.toLocaleString()} {t("left")}</span>
+              </div>
             </div>
           </div>
         </div>
